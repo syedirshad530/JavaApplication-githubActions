@@ -50,4 +50,16 @@ jobs:
         id: artifact-name
         run: find target/*.jar -type f -execdir echo 'artifact-data={}' >> $GITHUB_OUTPUT ';'
         
- 
+        deploy:
+          needs: build
+          name: taking artifacts of maven
+          runs-on: ubuntu-latest
+          steps:
+            - name: Get artifacts data from build jobs
+              uses: actions/download-artifact@v7
+              with:
+                name: artifact-data
+            - name: list my artifact
+              run: ls
+            - name: getting artifact file name
+              run: echo ${{ needs.build.outputs.artifact-data }}
